@@ -1,0 +1,50 @@
+.content-container {
+  min-height: calc(100vh - 34px);
+}
+
+.footer--pin {
+  position: relative;
+  left: 0;
+  bottom: 0;
+}
+
+
+
+.login-card {
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+.login-card .card-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.login-card form {
+  margin-bottom: 0;
+}
+.login-card form .form-label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.login-card form .form-control {
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 15px;
+  padding: 10px;
+}
+.login-card form .btn {
+  background-color: #007bff;
+  border-color: #007bff;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+}
+
+.login-card form .btn:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
+}

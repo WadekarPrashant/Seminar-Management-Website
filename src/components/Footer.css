@@ -1,0 +1,34 @@
+.footer--pin {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  .footer--pin .container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  
+  .footer--pin .list-unstyled li {
+    margin-bottom: 10px;
+  }
+  
+  .footer--pin .text-uppercase {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  
+  .footer--pin a {
+    color: #333;
+  }
+  
+  .footer--pin a:hover {
+    color: #666;
+  }
+  
+  @media (max-width: 768px) {
+    .footer--pin .mb-md-0 {
+      margin-bottom: 30px !important;
+    }
+  }

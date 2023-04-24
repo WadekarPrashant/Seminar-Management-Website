@@ -1,0 +1,22 @@
+.navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .navbar-brand img {
+    max-height: 40px;
+  }
+  
+  .nav-link {
+    color: #333333;
+    font-weight: 500;
+    margin-right: 10px;
+    padding: 10px;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .nav-link:hover {
+    background-color: #e0e0e0;
+    border-radius: 3px;
+    color: #333333;
+  }
