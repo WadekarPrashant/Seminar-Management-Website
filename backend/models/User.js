@@ -4,12 +4,12 @@ const bodyParser = require('body-parser');
 
 
 const sequelize = new Sequelize('seminar', 'root', 'root123', {
-  host:'localhost',
+  host:'localhost',   // to connect mysql database
   dialect: 'mysql'
 });
 sequelize.authenticate()
   .then(() => {
-    console.log('User Connected to MySQL server');
+    console.log('User Connected to MySQL server');           // to check connected or not
   })
   .catch((error) => {
     console.error('Unable to connect to MySQL server:', error);
@@ -176,7 +176,7 @@ sequelize.authenticate()
 
   sequelize.sync()
   .then(() => {
-    console.log('Schema synchronized with database');
+    console.log('Schema synchronized with database');   // 
   })
   .catch((error) => {
     console.error('Unable to synchronize schema with database:',error);

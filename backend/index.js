@@ -1,7 +1,8 @@
 
 const jwt = require('jsonwebtoken');
 // const bcrypt = require('bcryptjs');
-const JWT_SECRET = "Parasisgoodb$oi"
+const JWT_SECRET = "mit132334#@$$$";
+
 const {students, guides, coordinators,Ppt3} = require('./models/User');
 // const Sequelize = require('sequelize');
 const express = require('express');
