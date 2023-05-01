@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table } from 'react-bootstrap';
 import './Review1_results.css';
+import { useSelector, useDispatch } from 'react-redux';
 
 function Review1_results() {
+  //
+  const cartItems = useSelector(state => state.cartItems);
+  var u ;
+  var g ;
+  cartItems.map(item => (
+    u = item.userEmail,
+    g = item.guideEmail 
+))
+
   const [result, setResult] = useState([]);
 
   //  const userEmail = 'parasrauwtSs@gmail.com';
@@ -17,6 +27,7 @@ function Review1_results() {
       body: JSON.stringify({ email: userEmail}),
     });
     const json = await response.json();
+    console.log(json)
     setResult(json);
   }
 

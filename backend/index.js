@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 // const bcrypt = require('bcryptjs');
 const JWT_SECRET = "mit132334#@$$$";
 
-const {students, guides, coordinators,Ppt3} = require('./models/User');
+const {students, guides, coordinators} = require('./models/User');
 // const Sequelize = require('sequelize');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -53,15 +53,16 @@ app.post('/studentpost', [
   const { name, email, cpassword  ,confirmPassword } = req.body;
  
   students.create({ name, email, cpassword : hashedPassword ,confirmPassword })
-  .then((students) => {
-    const token = jwt.sign(students.id, JWT_SECRET);
+  .then((student) => {
+    const payload = { id: student.id };
+    const token = jwt.sign(payload, JWT_SECRET);
     console.log(token);
     success=true;
-            res.status(201).json({success,students,token});
-          })
-          .catch((error) => {
-           console.log("Error :",error);
-              });
+    res.status(201).json({success,student,token});
+  })
+  .catch((error) => {
+    console.log("Error :",error);
+  });
  
 });
 
@@ -101,7 +102,8 @@ app.post('/guidepost', [
    
     guides.create({ name, email, cpassword : hashedPassword ,confirmPassword })
     .then((guides) => {
-      const token = jwt.sign(guides.id, JWT_SECRET);
+      const payload = { id: guides.id };
+      const token = jwt.sign(payload, JWT_SECRET);
       console.log(token);
       success=true;
               res.status(201).json({success,guides,token});
@@ -148,7 +150,8 @@ app.post('/coordinatorpost', [
    
     coordinators.create({ name, email, cpassword : hashedPassword ,confirmPassword })
     .then((coordinators) => {
-      const token = jwt.sign(coordinators.id, JWT_SECRET);
+      const payload = { id: coordinators.id };
+      const token = jwt.sign(payload, JWT_SECRET);
       console.log(token);
       success=true;
               res.status(201).json({success,coordinators,token});
@@ -186,7 +189,8 @@ app.post('/login', async (req, res) => {
 
   // Create and send a JWT token as a response
   success=true;
-  const token = jwt.sign({ id: user.id }, JWT_SECRET);
+  const payload = { id: user.id};
+  const token = jwt.sign(payload , JWT_SECRET);
   res.json({success, token });
 });
 
@@ -209,7 +213,8 @@ app.post('/guidelogin', async (req, res) => {
   
     // Create and send a JWT token as a response
     success=true;
-    const token = jwt.sign({ id: user.id }, JWT_SECRET);
+    const payload = { id: user.id};
+    const token = jwt.sign(payload , JWT_SECRET);
     res.json({success, token });
   });
 
@@ -233,7 +238,8 @@ app.post('/cologin', async (req, res) => {
   
     // Create and send a JWT token as a response
     success=true;
-    const token = jwt.sign({ id: user.id }, JWT_SECRET);
+    const payload = { id: user.id};
+    const token = jwt.sign(payload, JWT_SECRET);
     res.json({success, token });
   });
 
@@ -242,16 +248,16 @@ app.post('/cologin', async (req, res) => {
 
   // ***************************** Review ***********************
 
-  const {review1,review1_results,Ppt,review2_results,review3_results} = require('./models/User');
+  const {review1,review1_results,Ppt,review2_results,review3_results,Ppt3} = require('./models/User');
 
   // post topics
 app.post('/topicpost', async  (req, res) => {
   var success=false;
 
   // Insert the user data into the MySQL database
-  const { email , topic1 , topic2 , topic3 } = req.body;
+  const { guideEmail,studentEmail , topic1 , topic2 , topic3 } = req.body;
  
-  review1.create({ email, topic1 , topic2 , topic3})
+  review1.create({guideEmail, studentEmail, topic1 , topic2 , topic3})
   .then((review1) => {
     success=true;
             res.status(201).json({success,review1});
@@ -279,11 +285,43 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
-app.get('/gettopics', async (req, res) => {
-  try {
-    const [rows, fields] = await pool.execute('SELECT * FROM review1s');
-    const result = JSON.parse(JSON.stringify(rows));
+// app.get('/gettopics', async (req, res) => {
+//   try {
+//     const [rows, fields] = await pool.execute('SELECT * FROM review1s');
+//     const result = JSON.parse(JSON.stringify(rows));
   
+//     res.send(result);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send('Error retrieving data from database');
+//   }
+// });
+//new gettopics
+app.post('/gettopics', async (req, res) => {
+  const { studentEmail } = req.body;
+  const { guideEmail } = req.body;
+  try {
+    const reviews = await review1.findAll({
+      where: {
+        studentEmail: studentEmail,
+        guideEmail: guideEmail
+      }
+    });
+    res.send(reviews);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Error retrieving reviews from database');
+  }
+});
+
+
+// *********** getstudentguide  student 
+app.post('/getppt3', async (req, res) => {
+  try {
+    const { studentEmail } = req.body;
+  const { guideEmail } = req.body;
+    const [rows, fields] = await pool.execute(`SELECT * FROM ppt3s WHERE studentEmail = ? and guideEmail=?`, [studentEmail,guideEmail]);
+    const result = JSON.parse(JSON.stringify(rows));
     res.send(result);
   } catch (error) {
     console.log(error);
@@ -329,7 +367,7 @@ const fs = require('fs');
 const path = require('path');
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'C:\\Users\\Dell\\OneDrive\\Desktop\\seminar\\backend\\uploads');
+      cb(null, 'P:\\Seminar\\seminar\\backend\\uploads');
     },
     filename: (req, file, cb) => {
       const fileName = `${Date.now()}-${file.originalname}`;
@@ -361,13 +399,14 @@ app.post('/sendppt', (req, res) => {
 
     // File is uploaded successfully
     const ppt = req.file;
-    const email = req.body.email;
-    const filename = req.body.filename
+    const guideEmail = req.body.guideEmail;
+    const filename = req.body.filename;
+    const studentEmail = req.body.studentEmail
 
     // Store the file in the database
     const pptData = fs.readFileSync(path.join(__dirname, `uploads/${ppt.filename}`));
     // Your database code here...
-    Ppt.create({ email,filename, pptData })
+    Ppt.create({ guideEmail,studentEmail,filename, pptData })
     .then((result) => {
       success=true;
               res.status(201).json({success,result});
@@ -378,40 +417,12 @@ app.post('/sendppt', (req, res) => {
   });
 });
 
-//chatgpt get ppt
 
-// app.post('/getppt', async (req, res) => {
-//   const email = req.body.email;
-//   const filename = req.body.filename;
-
-//   // Validate the email and filename here...
-
-//   try {
-//     const [result] = await pool.execute(`SELECT * FROM ppts WHERE email=? AND filename=?`, [email, filename]);
-//     if (result && result.length > 0) {
-//       const pptData = result[0].pptData;
-//       const pptBuffer = Buffer.from(pptData, 'binary');
-
-//       const responseData = {
-//         email: email,
-//         filename: filename,
-//         pptBuffer: pptBuffer
-//       };
-
-//       res.status(200).json(responseData);
-//       console.log(`File ${filename} sent successfully`);
-//     } else {
-//       res.status(404).json({ message: 'File not found' });
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
 app.post('/getppt', async (req, res) => {
   try {
-    const email = req.body.email;
-    const [rows, fields] = await pool.execute(`SELECT * FROM ppts `);
+    const { studentEmail } = req.body;
+  const { guideEmail } = req.body;
+    const [rows, fields] = await pool.execute(`SELECT * FROM ppts WHERE studentEmail = ? and guideEmail=?`, [studentEmail,guideEmail]);
     const result = JSON.parse(JSON.stringify(rows));
     res.send(result);
   } catch (error) {
@@ -430,13 +441,14 @@ app.post('/sendppt3', (req, res) => {
 
     // File is uploaded successfully
     const ppt = req.file;
-    const email = req.body.email;
-    const filename = req.body.filename
+    const guideEmail = req.body.guideEmail;
+    const filename = req.body.filename;
+    const studentEmail = req.body.studentEmail
 
     // Store the file in the database
     const pptData = fs.readFileSync(path.join(__dirname, `uploads/${ppt.filename}`));
     // Your database code here...
-    Ppt3.create({ email,filename, pptData })
+    Ppt3.create({ guideEmail,studentEmail,filename, pptData })
     .then((result) => {
       success=true;
               res.status(201).json({success,result});
@@ -446,7 +458,6 @@ app.post('/sendppt3', (req, res) => {
                 });
   });
 });
-
 
 app.post('/getppt3', async (req, res) => {
   try {
@@ -525,12 +536,12 @@ app.post('/entermarks3', async  (req, res) => {
 
 // //
 app.post('/store-selected-pair', async (req, res) => {
-  const { studentId, student_name, guideId, guide_name } = req.body;
+  const { studentId, student_name,student_email, guideId, guide_name,guide_email } = req.body;
 
   try {
     const conn = await pool.getConnection();
-    await conn.query('CREATE TABLE IF NOT EXISTS selected_pairs (student_id INT, student_name VARCHAR(30), guide_id INT, guide_name VARCHAR(30))');
-    await conn.query('INSERT INTO selected_pairs (student_id,student_name, guide_id,guide_name) VALUES (?,?,?,?)', [studentId, student_name, guideId, guide_name]);
+    await conn.query('CREATE TABLE IF NOT EXISTS selected_pairs (student_id INT, student_name VARCHAR(30),student_email VARCHAR(30), guide_id INT, guide_name VARCHAR(30),guide_email VARCHAR(30))');
+    await conn.query('INSERT INTO selected_pairs (student_id,student_name, student_email,guide_id,guide_name,guide_email) VALUES (?,?,?,?,?,?)', [studentId, student_name,student_email, guideId, guide_name,guide_email]);
     conn.release();
     return res.status(200).json({ message: 'Selected pair stored successfully' });
   } catch (error) {
@@ -567,6 +578,48 @@ app.get('/get-guides', async (req, res) => {
   }
 });
 
+
+app.get('/get-pair', async (req, res) => {
+  try {
+    const connection = await pool.getConnection();
+    const [results, fields] = await connection.execute('SELECT * FROM selected_pairs');
+    connection.release();
+
+    res.send(results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error retrieving students');
+  }
+});
+//
+app.post('/getpair', async (req, res) => {
+  try {
+    const guideEmail = req.body.guideEmail;
+    const connection = await pool.getConnection();
+    const [results, fields] = await connection.execute(`SELECT * FROM selected_pairs WHERE guide_email='${guideEmail}'`);
+    connection.release();
+
+    res.send(results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error retrieving students');
+  }
+});
+
+
+app.post('/get_pair', async (req, res) => {
+  try {
+    const studentEmail = req.body.studentEmail;
+    const connection = await pool.getConnection();
+    const [results, fields] = await connection.execute(`SELECT * FROM selected_pairs WHERE student_email='${studentEmail}'`);
+    connection.release();
+
+    res.send(results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error retrieving students');
+  }
+});
 
 app.listen(5000, () => {
     console.log(`Server started on port 5000`);

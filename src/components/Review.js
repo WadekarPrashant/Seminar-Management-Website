@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import '../App.css';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,10 @@ import Review2 from './Review2';
 import Review2_results from './Review2_results';
 import Review3_results from './Review3_results';
 import Review3 from './Review3';
+import Navbar from './Navbar';
+import { useSelector, useDispatch } from 'react-redux';
+
+
 
 function Review() {
   const [review1, setReview1] = useState(false);
@@ -20,6 +24,31 @@ function Review() {
   const [review3_results, setReview3_results] = useState(false);
   const navigate = useNavigate();
 
+  //  
+  const [pairs, setPairs] = useState([]);
+  // const [guideEmail, setGuideEmail] = useState(null);
+  // const [studentEmail, setStudentEmail] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/get-pair')
+      .then(response => response.json())
+      .then(data => setPairs(data))
+      .catch(error => console.error(error));
+  }, []);
+
+  useEffect(() => {
+    const guideEmails = pairs.map(pair => pair.guide_email);
+    // const [guideEmail] = guideEmails;
+    // setGuideEmail(guideEmail);
+
+    // const studentEmails = pairs.map(pair => pair.student_email);
+    // const [studentEmail] = studentEmails;
+    // setStudentEmail(studentEmail);
+  }, [pairs]);
+
+
+   const studentEmail = localStorage.getItem('userEmail')
+  
   const signUp = () => {
     navigate('/prelogin');
   };
@@ -76,8 +105,34 @@ function Review() {
   const closeReview3_results = () => {
     setReview3_results(false);
   };
+  
+  const [guideEmail, setGuideEmail] = useState('');
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('http://localhost:5000/get_pair', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ studentEmail:studentEmail}),
+        });
+        const data = await response.json();
+        setGuideEmail(data[0].guide_email);
+        console.log(data[0].guide_email)
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchData();
+  }, []);
+  console.log(guideEmail)
+
   return (
     <>
+   <Navbar _email={studentEmail}/>
+  
       <Container fluid>
         <div
           className="container-fluid"
@@ -100,8 +155,27 @@ function Review() {
               transform: 'translate(-50%, -50%)',
               textAlign: 'center',
             }}
-          >
-            <h1>MIT-WPU</h1>
+          >     <h1>MIT-WPU</h1>
+          <hr />
+             <div className="container my-5">
+      <div className="row justify-content-center">
+        <div className="col-md-8">
+          <div className="card">
+            <div className="card-header">
+              Guide Email
+            </div>
+            <div className="card-body">
+              {guideEmail ? (
+                <p className="lead">Your guide email is <strong>{guideEmail}</strong>.</p>
+              ) : (
+                <p className="lead">You have not been assigned a guide yet.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+            <hr />
             <Row className="justify-content-center mt-5">
               <Col md={4}>
                 <Card className="login-card">
@@ -158,6 +232,7 @@ function Review() {
                 </Card>
               </Col>
             </Row>
+            <hr />
             <button
               onClick={signUp}
               type="submit"
@@ -213,6 +288,7 @@ function Review() {
         }
       `}</style>
         </Container>
+        
         </>
   )}
 

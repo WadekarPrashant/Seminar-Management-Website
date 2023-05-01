@@ -2,6 +2,7 @@
 import React, {useState} from 'react'
 import {Link} from "react-router-dom"
 import {useNavigate} from 'react-router-dom';
+import Navbar from './Navbar';
 
 function StuSignup(props) {
   const [credentials, setCredentials] = useState({name:"",email: "", cpassword: "",confirmPassword:""}) 
@@ -26,7 +27,7 @@ function StuSignup(props) {
       }
       else{
          alert("User With This email Already exits")
-         navigate('/stulogin');
+         
       }
       
   }
@@ -93,6 +94,7 @@ function StuSignup(props) {
   return (
 
     <>
+    <Navbar/>
     <h2>Student Sign-Up <Link to="/stulogin" className="m-3 btn btn-danger my-element" >Already A User</Link></h2> 
    
       <style>{styles}</style>

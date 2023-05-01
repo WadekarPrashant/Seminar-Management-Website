@@ -2,6 +2,7 @@ import React from 'react'
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import '../App.css';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 
 function PreLoginPage() {
 
@@ -23,6 +24,7 @@ const guideclick =()=>{
 }
 
   return (<>
+  <Navbar/>
     <Container fluid> 
     <div
         className='container-fluid'

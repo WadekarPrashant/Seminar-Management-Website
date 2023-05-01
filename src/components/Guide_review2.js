@@ -1,7 +1,7 @@
-
 import { useEffect, useState } from 'react';
 import { Button, Container, Row, Col, Form, Table } from 'react-bootstrap';
 import './Guide_review2.css';
+import { useSelector, useDispatch } from 'react-redux';
 
 
 function Guide_review2() {
@@ -10,34 +10,46 @@ function Guide_review2() {
   const [pptBuffer, setPptBuffer] = useState(null);
   const [marks, setMarks] = useState(null);
 
-  // useEffect(() => {
-  //   fetch('http://localhost:5000/getppt', {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify({ email: 'example@example.com', filename: 'Seminar.pptx' })
-  //   }).then(response => response.json())
-  //     .then(data => {
-  //       setEmail(data.email);
-  //       setFilename(data.filename);
-  //       setPptBuffer(data.pptBuffer);
-  //     })
-  //     .catch(error => console.log(error));
-  // }, []);
+  //
+  const [studentEmail, setStudentEmail] = useState('');
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+     
+        const response = await fetch('http://localhost:5000/getpair', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ guideEmail:guideEmail}),
+        });
+        const data = await response.json();
+        setStudentEmail(data[0].student_email);
+        // console.log(data[0].student_email)
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchData();
+  }, []);
+  console.log(studentEmail)
+  const guideEmail = localStorage.getItem('guideEmail')
+  
   const [pptData, setPptData] = useState([]);
-  const userEmail = localStorage.getItem('userEmail')
-
+ 
   useEffect(() => {
     fetch('http://localhost:5000/getppt', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: userEmail, filename: 'Seminar.pptx' })
+      body: JSON.stringify({ studentEmail: studentEmail,guideEmail:guideEmail ,filename: 'Seminar.pptx' })
     }).then(response => response.json())
       .then(data => {
         setPptData(data);
       })
       .catch(error => console.log(error));
-  }, []);
+  }, [guideEmail, studentEmail]);
 
   function handleDownload() {
     if (pptBuffer) {
@@ -51,22 +63,22 @@ function Guide_review2() {
     }
   }
 
+
   function handleMarksSubmit(e) {
     e.preventDefault();
     // Send marks data to server
     fetch('http://localhost:5000/entermarks', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: userEmail, marks: marks })
+      body: JSON.stringify({ email: studentEmail, marks: marks })
     }).then(response => {console.log(response); alert("marks alloted successfully")})
       .catch(error => console.log(error));
   }
-console.log(pptData)
   return (
     <Container>
       <Row>
         <Col>
-          <h1>Review 2 (Guide)</h1>
+          <h1>Review 2 (Guide ({guideEmail}))</h1>
         </Col>
       </Row>
       <Table striped bordered hover>
@@ -81,17 +93,17 @@ console.log(pptData)
        <tbody>
   {pptData.map((data, index) => (
     <tr key={index}>
-      <td>{data.email}</td>
+      <td>{studentEmail}</td>
       <td>{data.filename}</td>
       <td>
-        {data.pptBuffer && (
+      
           <Button variant="success" onClick={() => handleDownload(data.pptBuffer, data.filename)}>
             Download
           </Button>
-        )}
+       
       </td>
       <td>
-        <Form onSubmit={(e) => handleMarksSubmit(e, data.email)}>
+        <Form onSubmit={(e) => handleMarksSubmit(e, studentEmail)}>
           <Form.Group controlId="marks">
             <Form.Control type="number" onChange={(e) => setMarks(e.target.value)} />
           </Form.Group>

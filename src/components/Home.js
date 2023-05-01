@@ -1,7 +1,9 @@
 import React from 'react'
-
+import Navbar from './Navbar';
 export default function Home() {
   return (
+    <>
+    <Navbar/>
     <div><div className='content-container'>
     <div style={{ 
       position: 'relative',
@@ -12,5 +14,6 @@ export default function Home() {
     }}>
     </div>
   </div></div>
+  </>
   )
 }

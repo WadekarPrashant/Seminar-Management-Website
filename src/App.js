@@ -19,12 +19,13 @@ import Review2 from './components/Review2';
 import Review2_results from './components/Review2_results';
 import Review3 from './components/Review3';
 import Coreview from './components/Coreview';
+import { Provider } from 'react-redux';
+import store from './store';
 
 function App() {
   return (
-<><div>
+    <Provider store={store}><div>
    <HashRouter > 
-   <Navbar/>
  <Routes>
 <Route path='/' element={ <Home/>}/>
 <Route path='/stulogin' element={ <StuLogin/>}/>
@@ -44,10 +45,11 @@ function App() {
 <Route path='/guidereview' element={ <Guide_review/>}/>
 <Route path='/coreview' element={ <Coreview/>}/>
 </Routes>
+<hr />
 <Footer/>
 </HashRouter> 
 </div> 
-</>
+</Provider>
   );
 }
 

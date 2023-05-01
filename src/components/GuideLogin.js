@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 
 function StuLogin(props) {
 
@@ -24,7 +25,6 @@ function StuLogin(props) {
       navigate('/guidereview');
     alert("Successfully Loged in")
     } else {
-    
     alert("Please Login With Correct Credentials")
     }
   };
@@ -79,6 +79,7 @@ function StuLogin(props) {
 
   return (
     <>
+    <Navbar/>
       <style>{styles}</style>
       <div 
         className='container-fluid'

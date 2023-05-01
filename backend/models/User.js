@@ -22,9 +22,9 @@ sequelize.authenticate()
     },
     email: {
       type: Sequelize.STRING,
-
       allowNull: false,
-      unique: true
+      unique: true,
+      primaryKey: true
     },
     cpassword: {
       type: Sequelize.STRING,
@@ -64,9 +64,9 @@ sequelize.authenticate()
     },
     email: {
       type: Sequelize.STRING,
-
       allowNull: false,
-      unique: true
+      unique: true,
+      primaryKey: true
     },
     cpassword: {
       type: Sequelize.STRING,
@@ -79,9 +79,21 @@ sequelize.authenticate()
   });
 
   const review1 = sequelize.define('review1', {
-    email: {
+    guideEmail: {
       type: Sequelize.STRING,
       allowNull: false,
+      references: {
+        model: 'guides',
+        key: 'email'
+      }
+    },
+    studentEmail: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      references: {
+        model: 'students',
+        key: 'email'
+      }
     },
     topic1: {
       type: Sequelize.STRING,
@@ -144,9 +156,21 @@ sequelize.authenticate()
 
 
   const Ppt = sequelize.define('Ppt', {
-    email: {
+    guideEmail: {
       type: Sequelize.STRING,
       allowNull: false,
+      references: {
+        model: 'guides',
+        key: 'email'
+      }
+    },
+    studentEmail: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      references: {
+        model: 'students',
+        key: 'email'
+      }
     },
 
     filename: {
@@ -158,10 +182,23 @@ sequelize.authenticate()
       allowNull: false,
     },
   });
-  const Ppt3 = sequelize.define('Ppt3', {
-    email: {
+
+ const Ppt3 = sequelize.define('Ppt3', {
+    guideEmail: {
       type: Sequelize.STRING,
       allowNull: false,
+      references: {
+        model: 'guides',
+        key: 'email'
+      }
+    },
+    studentEmail: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      references: {
+        model: 'students',
+        key: 'email'
+      }
     },
 
     filename: {
@@ -173,6 +210,16 @@ sequelize.authenticate()
       allowNull: false,
     },
   });
+
+  //
+  review1.belongsTo(guides, { foreignKey: 'guideEmail' });
+review1.belongsTo(students, { foreignKey: 'studentEmail' });
+
+Ppt.belongsTo(guides, { foreignKey: 'guideEmail' });
+Ppt.belongsTo(students, { foreignKey: 'studentEmail' });
+
+Ppt3.belongsTo(guides, { foreignKey: 'guideEmail' });
+Ppt3.belongsTo(students, { foreignKey: 'studentEmail' });
 
   sequelize.sync()
   .then(() => {

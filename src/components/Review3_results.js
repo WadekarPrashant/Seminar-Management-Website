@@ -1,21 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table } from 'react-bootstrap';
 import './Review1_results.css';
+import { useSelector, useDispatch } from 'react-redux';
 
-function Review3_results() {
+function Review2_results() {
   const [result, setResult] = useState([]);
+  const [pairs, setPairs] = useState([]);
 
-  //  const userEmail = 'parasrauwtSs@gmail.com';
-   const userEmail = localStorage.getItem('userEmail');
-  // const userEmail = 'example@example.com'
+  useEffect(() => {
+    fetch('http://localhost:5000/get-pair')
+      .then(response => response.json())
+      .then(data => setPairs(data))
+      .catch(error => console.error(error));
+  }, []);
 
-  async function loaddata() {
+  const userEmails = pairs.map(pair => pair.student_email);
+  const [userEmail] = userEmails;
+
+  async function loaddata(email) {
     const response = await fetch('http://localhost:5000/getresult3', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email: userEmail}),
+      body: JSON.stringify({ email }),
     });
     const json = await response.json();
     console.log(json)
@@ -23,8 +31,10 @@ function Review3_results() {
   }
 
   useEffect(() => {
-    loaddata();
-  }, []);
+    if (userEmail) {
+      loaddata(userEmail);
+    }
+  }, [userEmail]);
 
   return (
     <Container>
@@ -56,5 +66,6 @@ function Review3_results() {
       )}
     </Container>
   );
-      }
-export default Review3_results;
+}
+
+export default Review2_results;
