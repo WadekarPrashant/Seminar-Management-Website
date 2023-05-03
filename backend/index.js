@@ -144,7 +144,6 @@ app.post('/coordinatorpost', [
    const salt = await bcrypt.genSalt(10);
    const hashedPassword = await bcrypt.hash(req.body.cpassword, salt);
   
-  
     // Insert the user data into the MySQL database
     const { name, email, cpassword  ,confirmPassword } = req.body;
    
@@ -367,7 +366,7 @@ const fs = require('fs');
 const path = require('path');
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'P:\\Seminar\\seminar\\backend\\uploads');
+      cb(null, 'C:\\Users\\Dell\\OneDrive\\Desktop\\seminar\\backend\\uploads');
     },
     filename: (req, file, cb) => {
       const fileName = `${Date.now()}-${file.originalname}`;
