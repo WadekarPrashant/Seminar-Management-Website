@@ -119,6 +119,7 @@ function Review() {
         });
         const data = await response.json();
         setGuideEmail(data[0].guide_email);
+        setGuideName(data[0].guide_name);
         console.log(data[0].guide_email)
       } catch (error) {
         console.error(error);
@@ -129,6 +130,8 @@ function Review() {
   }, []);
   console.log(guideEmail)
 
+
+  const [guideName, setGuideName] = useState('');
   return (
     <>
    <Navbar _email={studentEmail}/>
@@ -166,7 +169,7 @@ function Review() {
             </div>
             <div className="card-body">
               {guideEmail ? (
-                <p className="lead">Your guide email is <strong>{guideEmail}</strong>.</p>
+                <p className="lead">Your guide  is <strong>{guideName}</strong>.</p>
               ) : (
                 <p className="lead">You have not been assigned a guide yet.</p>
               )}

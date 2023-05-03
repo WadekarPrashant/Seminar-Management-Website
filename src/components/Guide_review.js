@@ -68,6 +68,7 @@ function Guide_review() {
 
   //
   const [studentEmail, setStudentEmail] = useState('');
+  const [studentName, setStudentName] = useState('');
 
   useEffect(() => {
     async function fetchData() {
@@ -82,6 +83,7 @@ function Guide_review() {
         });
         const data = await response.json();
         setStudentEmail(data[0].student_email);
+        setStudentName(data[0].student_name);
         // console.log(data[0].student_email)
       } catch (error) {
         console.error(error);
@@ -130,7 +132,7 @@ function Guide_review() {
             </div>
             <div className="card-body">
               {studentEmail ? (
-                <p className="lead">Your student email is <strong>{studentEmail}</strong>.</p>
+                <p className="lead">Your student is <strong>{studentName}</strong>.</p>
               ) : (
                 <p className="lead">You have not been assigned a student yet.</p>
               )}
