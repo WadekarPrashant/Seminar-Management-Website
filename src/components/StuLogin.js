@@ -25,7 +25,7 @@ function StuLogin(props) {
       navigate('/review');
     alert("Successfully Loged in")
     } else {
-      navigate('/login');
+      navigate('/stulogin');
     alert("Please Login With Correct Credentials")
     }
   };

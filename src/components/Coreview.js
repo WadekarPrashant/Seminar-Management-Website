@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 import Model from './Model';
 import Guide_review1 from './Guide_review1';
 
+
 import { useDispatch ,useSelector} from 'react-redux';
 import { actionCreator } from '../state/index';
 import { bindActionCreators } from "redux";
@@ -38,6 +39,8 @@ function App() {
       .catch(error => console.error(error));
   }, []);
 
+  console.log(students)
+
   // handle the form submission to store the selected pair
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -48,13 +51,14 @@ function App() {
       return;
     }
 
+
     // store the selected pair in the new table using the API endpoint
     fetch('http://localhost:5000/store-selected-pair', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ studentId: selectedStudent.id,student_name:selectedStudent.name,student_email:selectedStudent.email ,guideId: selectedGuide.id,guide_name:selectedGuide.name ,guide_email:selectedGuide.email})
+      body: JSON.stringify({ studentId: selectedStudent.id,student_name:selectedStudent.name,student_email:selectedStudent.email ,guideId: selectedGuide.id,guide_name:selectedGuide.name ,guide_email:selectedGuide.email,deadline:deadline})
     })
       .then(response => {
         if (response.ok) {
@@ -87,6 +91,43 @@ function App() {
   //
   const dispatch = useDispatch();
   const actions = bindActionCreators(actionCreator, dispatch);
+
+  //
+  const defaultPanels = [
+    { id: 1, name: 'A' },
+    { id: 2, name: 'B' },
+    { id: 3, name: 'C' },
+    { id: 4, name: 'D' },
+    { id: 5, name: 'E' },
+    { id: 6, name: 'F' },
+    { id: 7, name: 'G' },
+    { id: 8, name: 'H' },
+  ];
+  const [selectedPanel, setSelectedPanel] = useState(null);
+  const [panels, setPanels] = useState(defaultPanels);
+
+  //
+  const defaultDomains = [
+    { id: 1, name: 'AI' },
+    { id: 2, name: 'ML' },
+    { id: 3, name: 'WEB DEVELOPMENT' },
+    { id: 4, name: 'BLOCKCHAIN' },
+    { id: 5, name: 'CYBER SECURITY' },
+    { id: 6, name: 'IOT' }
+  ];
+  const [selectedDomain, setSelectedDomain] = useState(null);
+  const [domains, setDomains] = useState(defaultDomains);
+
+  //
+  const [deadline, setDeadline] = useState("");
+  console.log(deadline)
+
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const handleDateSelect = (e) => {
+    setDeadline(e.target.value);
+    setSelectedDate(e.target.value);
+  };
   return (
     <>
    <Navbar _email={coEmail}/>
@@ -115,42 +156,125 @@ function App() {
     <Container>
       <Row>
         <Col>
-          <h3>Students</h3>
-          <hr />
-          <ListGroup style={{ backgroundColor: '#F0F0F0', padding: '10px' }}>
-            {students.map(student => (
-              <ListGroup.Item
-                key={student.id}
-                active={selectedStudent && selectedStudent.id === student.id}
-                onClick={() => setSelectedStudent(student)}
-                style={{ cursor: 'pointer' }}
-              >
-                {student.name}
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </Col>
+  <h3>Students</h3>
+  <hr />
+  <Form>
+    <Form.Group controlId="panelSelect">
+      <Form.Label>Select Panel</Form.Label>
+      <Form.Control as="select" onChange={event => setSelectedPanel(event.target.value)}>
+        <option value="">-- Select Panel --</option>
+        {panels.map(panel => (
+          <option key={panel.id} value={panel.name}>{panel.name}</option>
+        ))}
+      </Form.Control>
+    </Form.Group>
+  </Form>
+  {selectedPanel && (
+  <ListGroup style={{ backgroundColor: '#F0F0F0', padding: '10px' }}>
+
+    {students.filter(student => !selectedPanel || student.PANEL === selectedPanel).map(student => (
+      <ListGroup.Item
+        key={student.email}
+        active={selectedStudent && selectedStudent.email  === student.email}
+        onClick={() => setSelectedStudent(student)}
+        style={{ cursor: 'pointer' }}
+      >
+         
+         <tbody style={{left:"0px"}}>
+                  <tr>
+                <td>Name : {student.name}</td>
+                </tr>
+                </tbody>
+                <tbody style={{left:"0px"}}>
+                <tr>
+                  <td>PRN : {student.PRN}</td>
+                  </tr>
+                  </tbody>
+                 
+                 
+                  <tbody style={{left:"0px"}}> 
+                  <tr>
+                  <td> Roll No. : {student.RollNo}</td>
+                  </tr>
+                   </tbody>
+                  
+      
+
+      </ListGroup.Item>
+     
+    ))}
+  </ListGroup>
+  )}
+</Col>
         <Col>
           <h3>Guides</h3>
           <hr />
+          <Form>
+    <Form.Group controlId="domainSelect">
+      <Form.Label>Select Domain</Form.Label>
+      <Form.Control as="select" onChange={event => setSelectedDomain(event.target.value)}>
+        <option value="">-- Select Domain --</option>
+        {domains.map(domains => (
+          <option key={domains.id} value={domains.name}>{domains.name}</option>
+        ))}
+      </Form.Control>
+    </Form.Group>
+  </Form>
+  {selectedDomain && (
           <ListGroup style={{ backgroundColor: '#F0F0F0', padding: '10px' }}>
-            {guides.map(guide => (
+             {guides.filter(guide => !selectedDomain || guide.DOMAIN === selectedDomain).map(guide => (
+           
               <ListGroup.Item
-                key={guide.id}
-                active={selectedGuide && selectedGuide.id === guide.id}
+                key={guide.email}
+                active={selectedGuide && selectedGuide.email === guide.email}
                 onClick={() => setSelectedGuide(guide)}
                 style={{ cursor: 'pointer' }}
               >
-                {guide.name}
+                <tbody>
+                <tr >
+                <td>Name </td>
+                
+                  <td>Qualification </td>
+                 
+                  <td> Experience</td>
+                    </tr>
+                   </tbody>
+                   <tbody>
+                <tr >
+                <td> {guide.name}</td>
+               
+                  <td>{guide.QUALIFICATION}</td>
+                  
+                  <td>{guide.EXPERICENCE} Yrs</td>
+                    </tr>
+                   </tbody>
               </ListGroup.Item>
+           
             ))}
           </ListGroup>
+          
+            )}
         </Col>
       </Row>
       <hr />
+      <div className="form-group">
+      <label htmlFor="deadline">Deadline:</label>
+      <input
+        type="date"
+        id="deadline"
+        name="deadline"
+        value={deadline}
+        onChange={handleDateSelect}
+        className="form-control"
+      />
+    </div>
       <Form onSubmit={handleSubmit}>
+      {selectedDate ? (
         <Button type="submit"  style={{ marginTop: '10px', backgroundColor: '#4CAF50', color: 'white', border: 'none' }}>Submit</Button>
-      </Form>
+        ) : (
+          <p>(Please assign a deadline to selected pair to continue)</p>
+        )}
+        </Form>
       {review1 ? (
                       <Model onClose={closeReview1}>
                         <Guide_review1 />
@@ -175,7 +299,7 @@ function App() {
               key={pair.student_id}
                 style={{ cursor: 'pointer' }}
               >
-                {pair.student_name} s
+                {pair.student_name} 
               </ListGroup.Item>
             ))}
           </ListGroup>

@@ -17,6 +17,7 @@ function Review1_results() {
 
   //  const userEmail = 'parasrauwtSs@gmail.com';
    const userEmail = localStorage.getItem('userEmail');
+   console.log(userEmail)
 
   async function loaddata() {
     const response = await fetch('http://localhost:5000/getresult1', {
@@ -24,7 +25,7 @@ function Review1_results() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email: userEmail}),
+      body: JSON.stringify({ email: "parasraut2511@gmail.com"}),
     });
     const json = await response.json();
     console.log(json)

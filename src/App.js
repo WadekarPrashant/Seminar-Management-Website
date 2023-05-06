@@ -45,8 +45,8 @@ function App() {
 <Route path='/guidereview' element={ <Guide_review/>}/>
 <Route path='/coreview' element={ <Coreview/>}/>
 </Routes>
-<hr />
-<Footer/>
+
+ <Footer/> 
 </HashRouter> 
 </div> 
 </Provider>

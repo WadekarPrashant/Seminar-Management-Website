@@ -5,18 +5,18 @@ import {useNavigate} from 'react-router-dom';
 import Navbar from './Navbar';
 
 function StuSignup(props) {
-  const [credentials, setCredentials] = useState({name:"",email: "", cpassword: "",confirmPassword:""}) 
+  const [credentials, setCredentials] = useState({name:"",email: "",PRN:"",PANEL:"",RollNo:"", cpassword: "",confirmPassword:""}) 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-      const {name,email,cpassword,confirmPassword} = credentials;
+      const {name,email,PRN,PANEL,RollNo,cpassword,confirmPassword} = credentials;
       e.preventDefault();
       const response = await fetch("http://localhost:5000/studentpost", {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
           },
-          body: JSON.stringify({name,email, cpassword,confirmPassword})
+          body: JSON.stringify({name,email,PRN,PANEL,RollNo, cpassword,confirmPassword})
       });
       const json = await response.json()
       console.log(json);
@@ -49,17 +49,11 @@ function StuSignup(props) {
     }
 
     .form-container {
-      // background-color: rgba(255, 255, 255, 0.8);
-     
-      // border-radius: 5px;
-      //  margin-top: 0px;
-      // height: 90vh; 
-      // width:50vw;
       background-color: rgba(255, 255, 255, 0.8);
-      border-radius: 5px;
+      border-radius: 20px;
       margin-top: 0px;
-      height: 90vh; 
-      width:50vw;
+      height: 130vh; 
+      width:30vw;
     }
 
     .form-label {
@@ -94,72 +88,90 @@ function StuSignup(props) {
   return (
 
     <>
-    <Navbar/>
-    <h2>Student Sign-Up <Link to="/stulogin" className="m-3 btn btn-danger my-element" >Already A User</Link></h2> 
-   
-      <style>{styles}</style>
-      <div 
-        className='container-fluid content-container'
-        style={{
-          backgroundImage: 'url(bg-mit.jpg)',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          height: '100vh',
-          width: '100vw',
-          position: 'relative',
-          marginTop: '0'
-        }}
-      >
+    <Navbar />
+    <style>{styles}</style>
+    <div
+      className='container-fluid content-container'
+      style={{
+        backgroundImage: 'url(bg-mit.jpg)',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        height: '170vh',
+        width: '100vw',
+        position: 'relative',
+        marginTop: '0'
+      }}
+    >
+  
       <div className='container-fluid content-container'>
-        <div className='form-container'>
+        <div className='form-container'
+          style={{
+            marginTop: '50px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start'
+          }}
+        >
+          <h1 style={{marginLeft: '5rem'}}>Student Login</h1>
           <form onSubmit={handleSubmit}
-            className='my-5'
-            style={{
-              marginTop: '30px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-             <div className="mb-3 p" >
-                    <label htmlFor="name" className="form-label">Name</label>
-                    <input onChange={onChange} type="test" className="form-control"  id="name" name="name" aria-describedby="emailHelp" />
-                 </div>
-                 <div className='mb-3 '>
-               <label htmlFor='email' className='form-label'>
-                Email address
-               </label>
-               <input onChange={onChange}
-                 type='email'
-                 className='form-control'
-                 id='email'
-                 name='email'
-                 aria-describedby='emailHelp'
-              />
-              <div id='emailHelp' className='form-text '>
-                 We'll never share your email with anyone else.
-             </div>
-             </div>
-             <div className="mb-3 " >
-                     <label htmlFor="password" className="form-label">Password</label>
-                     <input onChange={onChange} type="password" className="form-control"  name="cpassword" id="cpassword" required/>
-                 </div>
-                <div className="mb-3 " >
-                    <label htmlFor="cpassword" className="form-label">Confirm Password</label>
-                     <input onChange={onChange} type="password" className="form-control"  name="confirmPassword" id="confirmPassword" required />
-                </div>
+  className='my-5'
+  style={{
+    width: '50%'
+  }}
+>
 
-             <button type='submit' className='btn btn-primary'>
-               Submit
-            </button>
-             
-          </form>
+  <div className="mb p" style={{marginLeft: '1rem'}}>
+    <label htmlFor="name" className="form-label" style={{paddingLeft: '0.5rem'}}>Name</label>
+    <input onChange={onChange} type="text" className="form-control" id="name" name="name" aria-describedby="emailHelp" style={{paddingLeft: '0.5rem'}} />
+  </div>
+  <div className='mb-3 ' style={{marginLeft: '1rem'}}>
+    <label htmlFor='email' className='form-label' style={{paddingLeft: '0.5rem'}}>
+      Email address
+    </label>
+    <input onChange={onChange}
+      type='email'
+      className='form-control'
+      id='email'
+      name='email'
+      aria-describedby='emailHelp'
+      style={{paddingLeft: '0.5rem'}}
+    />
+    <div id='emailHelp' className='form-text ' style={{marginLeft: '1rem'}}>
+      We'll never share your email with anyone else.
+    </div>
+  </div>
+  <div className="mb-3 p" style={{marginLeft: '1rem'}}>
+    <label htmlFor="PRN" className="form-label" style={{paddingLeft: '0.5rem'}}>PRN</label>
+    <input onChange={onChange} type="text" className="form-control" id="PRN" name="PRN" aria-describedby="emailHelp" style={{paddingLeft: '0.5rem'}} />
+  </div>
+  <div className="mb-3 p" style={{marginLeft: '1rem'}}>
+    <label htmlFor="PANEL" className="form-label" style={{paddingLeft: '0.5rem'}}>PANEL</label>
+    <input onChange={onChange} type="text" className="form-control" id="PANEL" name="PANEL" aria-describedby="emailHelp" style={{paddingLeft: '0.5rem'}} />
+  </div>
+  <div className="mb-3 p" style={{marginLeft: '1rem'}}>
+    <label htmlFor="RollNo" className="form-label" style={{paddingLeft: '0.5rem'}}>ROLL NO. : </label>
+    <input onChange={onChange} type="text" className="form-control" id="RollNo" name="RollNo" aria-describedby="emailHelp" style={{paddingLeft: '0.5rem'}} />
+  </div>
+  <div className="mb-3 " style={{marginLeft: '1rem'}}>
+    <label htmlFor="password" className="form-label" style={{paddingLeft: '0.5rem'}}>Password</label>
+    <input onChange={onChange} type="password" className="form-control" name="cpassword" id="cpassword" required style={{paddingLeft: '0.5rem'}} />
+  </div>
+  <div className="mb-3 " style={{marginLeft: '1rem'}}>
+    <label htmlFor="cpassword" className="form-label" style={{paddingLeft: '0.5rem'}}>Confirm Password</label>
+    <input onChange={onChange} type="password" className="form-control" name="confirmPassword" id="confirmPassword" required style={{paddingLeft: '0.5rem'}} />
+  </div>
+
+  <button type='submit' className='btn btn-primary' style={{marginLeft: '1rem'}}>
+    Submit
+  </button>
+
+</form>
         </div>
-        
+  
       </div>
-      
-      </div>
-    </>
+  
+    </div>
+  </>
   );
 }
 

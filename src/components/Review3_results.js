@@ -14,8 +14,10 @@ function Review2_results() {
       .catch(error => console.error(error));
   }, []);
 
-  const userEmails = pairs.map(pair => pair.student_email);
-  const [userEmail] = userEmails;
+  // const userEmails = pairs.map(pair => pair.student_email);
+  // const [userEmail] = userEmails;
+
+  const userEmail = localStorage.getItem("userEmail")
 
   async function loaddata(email) {
     const response = await fetch('http://localhost:5000/getresult3', {

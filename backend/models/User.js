@@ -26,6 +26,18 @@ sequelize.authenticate()
       unique: true,
       primaryKey: true
     },
+    PRN: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    PANEL: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    RollNo: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
     cpassword: {
       type: Sequelize.STRING,
       allowNull: false
@@ -68,6 +80,18 @@ sequelize.authenticate()
       unique: true,
       primaryKey: true
     },
+    DOMAIN: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    QUALIFICATION: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    EXPERICENCE: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
     cpassword: {
       type: Sequelize.STRING,
       allowNull: false
@@ -95,11 +119,25 @@ sequelize.authenticate()
         key: 'email'
       }
     },
+    PANEL: {
+      type: Sequelize.STRING,
+      allowNull: false,
+     
+    },
+    RollNo: {
+      type: Sequelize.STRING,
+      allowNull: false,
+     
+    },
+    PRN: {
+      type: Sequelize.STRING,
+      allowNull: false,
+     
+    },
     topic1: {
       type: Sequelize.STRING,
       allowNull: false,
       unique: true
-      
     },
     topic2: {
       type: Sequelize.STRING,
@@ -172,7 +210,21 @@ sequelize.authenticate()
         key: 'email'
       }
     },
-
+    PANEL: {
+      type: Sequelize.STRING,
+      allowNull: false,
+     
+    },
+    RollNo: {
+      type: Sequelize.STRING,
+      allowNull: false,
+     
+    },
+    PRN: {
+      type: Sequelize.STRING,
+      allowNull: false,
+     
+    },
     filename: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -183,7 +235,7 @@ sequelize.authenticate()
     },
   });
 
- const Ppt3 = sequelize.define('Ppt3', {
+  const Ppt3 = sequelize.define('Ppt3', {
     guideEmail: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -200,7 +252,21 @@ sequelize.authenticate()
         key: 'email'
       }
     },
-
+    PANEL: {
+      type: Sequelize.STRING,
+      allowNull: false,
+     
+    },
+    RollNo: {
+      type: Sequelize.STRING,
+      allowNull: false,
+     
+    },
+    PRN: {
+      type: Sequelize.STRING,
+      allowNull: false,
+     
+    },
     filename: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -210,7 +276,6 @@ sequelize.authenticate()
       allowNull: false,
     },
   });
-
   //
   review1.belongsTo(guides, { foreignKey: 'guideEmail' });
 review1.belongsTo(students, { foreignKey: 'studentEmail' });

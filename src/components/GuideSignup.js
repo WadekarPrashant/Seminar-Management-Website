@@ -6,18 +6,18 @@ import {Link} from "react-router-dom"
 import {useNavigate} from 'react-router-dom';
 
 function GuideSignup(props) {
-  const [credentials, setCredentials] = useState({name:"",email: "", cpassword: "",confirmPassword:""}) 
+  const [credentials, setCredentials] = useState({name:"",email: "",DOMAIN:"", QUALIFICATION:"",EXPERICENCE:"",cpassword: "",confirmPassword:""}) 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-      const {name,email,cpassword,confirmPassword} = credentials;
+      const {name,email,DOMAIN,QUALIFICATION,EXPERICENCE,cpassword,confirmPassword} = credentials;
       e.preventDefault();
       const response = await fetch("http://localhost:5000/guidepost", {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
           },
-          body: JSON.stringify({name,email, cpassword,confirmPassword})
+          body: JSON.stringify({name,email, DOMAIN,QUALIFICATION,EXPERICENCE,cpassword,confirmPassword})
       });
       const json = await response.json()
       console.log(json);
@@ -35,58 +35,52 @@ function GuideSignup(props) {
       setCredentials({...credentials, [e.target.name]: e.target.value})
   }
   const styles = `
-    .container-fluid {
-      background-repeat: no-repeat;
-      background-size: cover;
-      // height: 100vh;
-      // width: 100vw;
-      position: relative;
-      margin-top: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  .container-fluid {
+    background-repeat: no-repeat;
+    background-size: cover;
+    // height: 100vh;
+    // width: 100vw;
+    position: relative;
+    margin-top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-    .form-container {
-      // background-color: rgba(255, 255, 255, 0.8);
-     
-      // border-radius: 5px;
-      //  margin-top: 0px;
-      // height: 90vh; 
-      // width:50vw;
-      background-color: rgba(255, 255, 255, 0.8);
-      border-radius: 5px;
-      margin-top: 0px;
-      height: 90vh; 
-      width:50vw;
-    }
+  .form-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    margin-top: 0px;
+    height: 130vh; 
+    width:30vw;
+  }
 
-    .form-label {
-      font-weight: bold;
-      text-align: left
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-    }
+  .form-label {
+    font-weight: bold;
+    text-align: left
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
 
-    .form-control {
-      border-radius: 5px;
-    }
+  .form-control {
+    border-radius: 5px;
+  }
 
-    .btn-primary {
-      background-color: #007bff;
-      border: none;
-      border-radius: 5px;
-      padding: 10px 20px;
-      margin-top: 10px;
-    }
+  .btn-primary {
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 10px;
+  }
 
-    .btn-primary:hover {
-      background-color: #0069d9;
-    }
-    .my-element {
-      float: right;
-    }
+  .btn-primary:hover {
+    background-color: #0069d9;
+  }
+  .my-element {
+    float: right;
+  }
   
   `;
 
@@ -94,8 +88,6 @@ function GuideSignup(props) {
 
     <>
     <Navbar/>
-    <h2>Guide Sign-Up <Link to="/stulogin" className="m-3 btn btn-danger my-element" >Already A User</Link></h2> 
-   
       <style>{styles}</style>
       <div 
         className='container-fluid content-container'
@@ -103,7 +95,7 @@ function GuideSignup(props) {
           backgroundImage: 'url(bg-mit.jpg)',
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
-          height: '100vh',
+          height: '170vh',
           width: '100vw',
           position: 'relative',
           marginTop: '0'
@@ -111,20 +103,21 @@ function GuideSignup(props) {
       >
       <div className='container-fluid content-container'>
         <div className='form-container'>
+        <h1 style={{marginLeft: '5rem'}}>Guide Login</h1>
           <form onSubmit={handleSubmit}
             className='my-5'
             style={{
-              marginTop: '30px',
+              marginTop: '50px',
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center',
+              alignItems: 'flex-start'
             }}
           >
-             <div className="mb-3 p" >
+             <div className="mb-3 p" style={{marginLeft: '1rem'}} >
                     <label htmlFor="name" className="form-label">Name</label>
-                    <input onChange={onChange} type="test" className="form-control"  id="name" name="name" aria-describedby="emailHelp" />
+                    <input  onChange={onChange} type="test" className="form-control"  id="name" name="name" aria-describedby="emailHelp" />
                  </div>
-                 <div className='mb-3 '>
+                 <div className='mb-3 ' style={{marginLeft: '1rem'}}>
                <label htmlFor='email' className='form-label'>
                 Email address
                </label>
@@ -135,20 +128,35 @@ function GuideSignup(props) {
                  name='email'
                  aria-describedby='emailHelp'
               />
-              <div id='emailHelp' className='form-text '>
+              <div id='emailHelp' className='form-text ' style={{marginLeft: '1rem'}}>
                  We'll never share your email with anyone else.
              </div>
+
+             <div className="mb-3 p" >
+                    <label htmlFor="DOMAIN" className="form-label">DOMAIN</label>
+                    <input  onChange={onChange} type="test" className="form-control"  id="DOMAIN" name="DOMAIN" aria-describedby="emailHelp" />
+                 </div>
+                 <div className="mb-3 p" >
+                    <label htmlFor="QUALIFICATION" className="form-label">QUALIFICATION</label>
+                    <input onChange={onChange} type="test" className="form-control"  id="QUALIFICATION" name="QUALIFICATION" aria-describedby="emailHelp" />
+                 </div>
+                 <div className="mb-3 p" >
+                    <label htmlFor="EXPERICENCE" className="form-label">YEAR OF EXPERICENCE</label>
+                    <input onChange={onChange} type="test" className="form-control"  id="EXPERICENCE" name="EXPERICENCE" aria-describedby="emailHelp" />
+                 </div>
+
+
              </div>
-             <div className="mb-3 " >
+             <div className="mb-3 " style={{marginLeft: '1rem'}}>
                      <label htmlFor="password" className="form-label">Password</label>
                      <input onChange={onChange} type="password" className="form-control"  name="cpassword" id="cpassword" required/>
                  </div>
-                <div className="mb-3 " >
+                <div className="mb-3 " style={{marginLeft: '1rem'}}>
                     <label htmlFor="cpassword" className="form-label">Confirm Password</label>
                      <input onChange={onChange} type="password" className="form-control"  name="confirmPassword" id="confirmPassword" required />
                 </div>
 
-             <button type='submit' className='btn btn-primary'>
+             <button type='submit' className='btn btn-primary' style={{marginLeft: '1rem'}}>
                Submit
             </button>
              

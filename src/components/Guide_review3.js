@@ -78,15 +78,17 @@ function Guide_review3() {
     <Container>
       <Row>
         <Col>
-          <h1>Review 3 (Guide ({guideEmail}))</h1>
+          <h1 style={{textAlign: "center", margin: "40px"}}>Review 3 (Guide : ({guideEmail}))</h1>
         </Col>
       </Row>
       <Table striped bordered hover>
         <thead>
           <tr>
             <th>Email</th>
+            <th>PRN No.</th>
+            <th>Panel</th>
+            <th>Roll No.</th>
             <th>Filename</th>
-            <th>Download</th>
             <th>Enter Marks</th>
           </tr>
         </thead>
@@ -94,14 +96,10 @@ function Guide_review3() {
   {pptData.map((data, index) => (
     <tr key={index}>
       <td>{studentEmail}</td>
+      <td>{data.PRN}</td>
+      <td>{data.PANEL}</td>
+      <td>{data.RollNo}</td>
       <td>{data.filename}</td>
-      <td>
-      
-          <Button variant="success" onClick={() => handleDownload(data.pptBuffer, data.filename)}>
-            Download
-          </Button>
-       
-      </td>
       <td>
         <Form onSubmit={(e) => handleMarksSubmit(e, studentEmail)}>
           <Form.Group controlId="marks">
@@ -113,6 +111,19 @@ function Guide_review3() {
     </tr>
   ))}
 </tbody>
+
+<div className='download-buttons'   style={{
+            position: "absolute",
+            right:"0px",
+            bottom: "0",
+            margin: "40px",
+          }}>
+  {pptData.map((data, index) => (
+    <td key={index}>  <Button variant="success" onClick={() => handleDownload(data.pptBuffer, data.filename)}>
+    Download
+  </Button></td>
+  ))}
+</div>
       </Table>
     </Container>
   );

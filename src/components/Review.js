@@ -11,6 +11,7 @@ import Review2_results from './Review2_results';
 import Review3_results from './Review3_results';
 import Review3 from './Review3';
 import Navbar from './Navbar';
+import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 
 
@@ -107,6 +108,7 @@ function Review() {
   };
   
   const [guideEmail, setGuideEmail] = useState('');
+  const [deadline, setDeadline] = useState(null);
   useEffect(() => {
     async function fetchData() {
       try {
@@ -119,8 +121,7 @@ function Review() {
         });
         const data = await response.json();
         setGuideEmail(data[0].guide_email);
-        setGuideName(data[0].guide_name);
-        console.log(data[0].guide_email)
+        setDeadline(data[0].deadline)
       } catch (error) {
         console.error(error);
       }
@@ -128,14 +129,17 @@ function Review() {
 
     fetchData();
   }, []);
-  console.log(guideEmail)
+  console.log(deadline)
+  //
+  const isDeadlinePassed = moment().isAfter(deadline, 'day');
+  const daysRemaining = moment(deadline).diff(moment(), 'days');
 
-
-  const [guideName, setGuideName] = useState('');
   return (
     <>
    <Navbar _email={studentEmail}/>
   
+   <div>
+      
       <Container fluid>
         <div
           className="container-fluid"
@@ -143,7 +147,7 @@ function Review() {
             backgroundImage: 'url(bg-mit.jpg)',
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
-            height: '100vh',
+            height: '150vh',
             width: '100vw',
             position: 'relative',
             marginTop: '0px',
@@ -158,8 +162,22 @@ function Review() {
               transform: 'translate(-50%, -50%)',
               textAlign: 'center',
             }}
-          >     <h1>MIT-WPU</h1>
-          <hr />
+          >  
+ {isDeadlinePassed ? (
+        <div>
+          <p>Deadline passed on {moment(deadline).format('MMMM Do, YYYY')}</p>
+        </div>
+      ) : (   <div>
+
+            <div>
+            <p>Today's date: {moment().format('MMMM Do, YYYY')}</p>
+              {!isDeadlinePassed && (
+             <p>Deadline: {moment(deadline).format('MMMM Do, YYYY')} ({daysRemaining} days remaining)</p>
+            )}
+               </div>
+      
+                <h1>MIT-WPU</h1>
+                    <hr />
              <div className="container my-5">
       <div className="row justify-content-center">
         <div className="col-md-8">
@@ -169,7 +187,7 @@ function Review() {
             </div>
             <div className="card-body">
               {guideEmail ? (
-                <p className="lead">Your guide  is <strong>{guideName}</strong>.</p>
+                <p className="lead">Your guide email is <strong>{guideEmail}</strong>.</p>
               ) : (
                 <p className="lead">You have not been assigned a guide yet.</p>
               )}
@@ -243,8 +261,10 @@ function Review() {
             >
               Login
             </button>
+            </div> )}
           </div>
         </div>
+        
         <style jsx>{`
           .card {
             background-color: #fff;
@@ -291,7 +311,8 @@ function Review() {
         }
       `}</style>
         </Container>
-        
+        </div>
+   
         </>
   )}
 

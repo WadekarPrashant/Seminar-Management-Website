@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import "./GUIDEREVIEW1.CSS"
 
 function GuideReview() {
   const [topics, setTopics] = useState([]);
@@ -88,8 +89,11 @@ function GuideReview() {
       <h1>Guide Review 1 ({guideEmail})</h1>
       <table className="table">
         <thead>
-          <tr>
-            <th>Email</th>
+          <tr  className="black-text">
+            <th  className="black-text">Email</th>
+            <th>Panel</th>
+            <th>Roll No.</th>
+            <th>Prn</th>
             <th>Topic 1</th>
             <th>Topic 2</th>
             <th>Topic 3</th>
@@ -100,6 +104,9 @@ function GuideReview() {
           {topics.map(topic => (
             <tr key={topic.id}>
               <td>{studentEmail}</td>
+              <td>{topic.PANEL}</td>
+              <td>{topic.RollNo}</td>
+              <td>{topic.PRN}</td>
               <td className={selectedTopics[studentEmail]?.topic === topic.topic1 ? 'selected' : ''}>{topic.topic1}</td>
               <td className={selectedTopics[studentEmail]?.topic === topic.topic2 ? 'selected' : ''}>{topic.topic2}</td>
               <td className={selectedTopics[studentEmail]?.topic === topic.topic3 ? 'selected' : ''}>{topic.topic3}</td>
@@ -121,3 +128,5 @@ function GuideReview() {
 }
 
 export default GuideReview;
+
+

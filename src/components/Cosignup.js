@@ -27,7 +27,7 @@ function CoSignup(props) {
          navigate('/coreview');
       }
       else{
-         alert("User With This email Already exits")
+         alert("Please SignUp With Correct Credentials")
          
       }
       

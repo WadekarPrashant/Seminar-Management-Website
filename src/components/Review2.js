@@ -5,6 +5,12 @@ import { useSelector, useDispatch } from 'react-redux';
 
 function Review2() {
 
+  //
+  const [panel, setPanel] = useState(null);
+  const [rollno, setRollno] = useState(null);
+  const [prn, setPrn] = useState(null);
+  const [studata, setStudata] = useState([]);
+
   //guide
   const [pairs, setPairs] = useState([]);
   // const [guideEmail, setGuideEmail] = useState(null);
@@ -44,6 +50,24 @@ function Review2() {
   };
 
   const handleSubmit = async (event) => {
+
+    const response = await fetch('http://localhost:5000/getstudentdetails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: studentEmail }),
+    });
+  
+    const data = await response.json();
+    const panels = data.map((pair) => pair.PANEL);
+    const rollnos = data.map((pair) => pair.RollNo);
+    const prns = data.map((pair) => pair.PRN);
+  
+    const panel = panels.length > 0 ? panels[0] : null;
+    const rollno = rollnos.length > 0 ? rollnos[0] : null;
+    const prn = prns.length > 0 ? prns[0] : null;
+  
     event.preventDefault();
   
     if (!file) {
@@ -58,7 +82,10 @@ function Review2() {
     formData.append('filename', file.name);
     formData.append('studentEmail', studentEmail );
     formData.append('guideEmail', guideEmail );
-    // const email = 'example@example.com'
+    formData.append('PRN', prn );
+    formData.append('PANEL', panel );
+    formData.append('RollNo', rollno );
+
   
   console.log(file.name);
     try {
