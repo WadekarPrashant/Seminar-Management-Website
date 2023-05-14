@@ -50,9 +50,9 @@ app.post('/studentpost', [
 
 
   // Insert the user data into the MySQL database
-  const { name, email, cpassword  ,confirmPassword } = req.body;
+  const { name, email,PRN,PANEL,RollNo, cpassword  ,confirmPassword } = req.body;
  
-  students.create({ name, email, cpassword : hashedPassword ,confirmPassword })
+  students.create({ name, email,PRN,PANEL,RollNo, cpassword : hashedPassword ,confirmPassword })
   .then((student) => {
     const payload = { id: student.id };
     const token = jwt.sign(payload, JWT_SECRET);
@@ -91,16 +91,13 @@ app.post('/guidepost', [
     if (!errors.isEmpty()) {
       return res.status(400).json({success, errors: errors.array() });
     }
-  
    // Hash the password
    const salt = await bcrypt.genSalt(10);
    const hashedPassword = await bcrypt.hash(req.body.cpassword, salt);
-  
-  
     // Insert the user data into the MySQL database
-    const { name, email, cpassword  ,confirmPassword } = req.body;
+    const { name, email,DOMAIN,QUALIFICATION,EXPERICENCE, cpassword  ,confirmPassword } = req.body;
    
-    guides.create({ name, email, cpassword : hashedPassword ,confirmPassword })
+    guides.create({ name, email,DOMAIN,QUALIFICATION, EXPERICENCE,cpassword : hashedPassword ,confirmPassword })
     .then((guides) => {
       const payload = { id: guides.id };
       const token = jwt.sign(payload, JWT_SECRET);
@@ -143,6 +140,7 @@ app.post('/coordinatorpost', [
    // Hash the password
    const salt = await bcrypt.genSalt(10);
    const hashedPassword = await bcrypt.hash(req.body.cpassword, salt);
+  
   
     // Insert the user data into the MySQL database
     const { name, email, cpassword  ,confirmPassword } = req.body;
@@ -254,16 +252,16 @@ app.post('/topicpost', async  (req, res) => {
   var success=false;
 
   // Insert the user data into the MySQL database
-  const { guideEmail,studentEmail , topic1 , topic2 , topic3 } = req.body;
+  const { guideEmail,studentEmail,PANEL,RollNo,PRN,  topic1 , topic2 , topic3 } = req.body;
  
-  review1.create({guideEmail, studentEmail, topic1 , topic2 , topic3})
+  review1.create({guideEmail, studentEmail,PANEL,RollNo,PRN, topic1 , topic2 , topic3})
   .then((review1) => {
     success=true;
             res.status(201).json({success,review1});
           })
           .catch((error) => {
             success = false;
-           console.log("Error hai :",error.fields);
+           console.log("Error hai s:",error);
            res.status(201).json(error.fields);
               });
  
@@ -366,7 +364,7 @@ const fs = require('fs');
 const path = require('path');
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'C:\\Users\\Dell\\OneDrive\\Desktop\\seminar\\backend\\uploads');
+      cb(null, 'P:\\Seminar\\seminar\\backend\\uploads');
     },
     filename: (req, file, cb) => {
       const fileName = `${Date.now()}-${file.originalname}`;
@@ -401,11 +399,14 @@ app.post('/sendppt', (req, res) => {
     const guideEmail = req.body.guideEmail;
     const filename = req.body.filename;
     const studentEmail = req.body.studentEmail
+    const PRN =req.body.PRN
+    const PANEL =req.body.PANEL
+    const RollNo =req.body.RollNo
 
     // Store the file in the database
     const pptData = fs.readFileSync(path.join(__dirname, `uploads/${ppt.filename}`));
     // Your database code here...
-    Ppt.create({ guideEmail,studentEmail,filename, pptData })
+    Ppt.create({ guideEmail,studentEmail,PRN,PANEL,RollNo,filename, pptData })
     .then((result) => {
       success=true;
               res.status(201).json({success,result});
@@ -443,11 +444,15 @@ app.post('/sendppt3', (req, res) => {
     const guideEmail = req.body.guideEmail;
     const filename = req.body.filename;
     const studentEmail = req.body.studentEmail
+    const PRN =req.body.PRN
+    const PANEL =req.body.PANEL
+    const RollNo =req.body.RollNo
+    
 
     // Store the file in the database
     const pptData = fs.readFileSync(path.join(__dirname, `uploads/${ppt.filename}`));
     // Your database code here...
-    Ppt3.create({ guideEmail,studentEmail,filename, pptData })
+    Ppt3.create({ guideEmail,studentEmail,PRN,PANEL,RollNo,filename, pptData })
     .then((result) => {
       success=true;
               res.status(201).json({success,result});
@@ -535,12 +540,12 @@ app.post('/entermarks3', async  (req, res) => {
 
 // //
 app.post('/store-selected-pair', async (req, res) => {
-  const { studentId, student_name,student_email, guideId, guide_name,guide_email } = req.body;
+  const { studentId, student_name, student_email, guideId, guide_name, guide_email, deadline } = req.body;
 
   try {
     const conn = await pool.getConnection();
-    await conn.query('CREATE TABLE IF NOT EXISTS selected_pairs (student_id INT, student_name VARCHAR(30),student_email VARCHAR(30), guide_id INT, guide_name VARCHAR(30),guide_email VARCHAR(30))');
-    await conn.query('INSERT INTO selected_pairs (student_id,student_name, student_email,guide_id,guide_name,guide_email) VALUES (?,?,?,?,?,?)', [studentId, student_name,student_email, guideId, guide_name,guide_email]);
+    await conn.query('CREATE TABLE IF NOT EXISTS selected_pairs (student_id INT, student_name VARCHAR(30), student_email VARCHAR(30), guide_id INT, guide_name VARCHAR(30), guide_email VARCHAR(30), deadline VARCHAR(30))');
+    await conn.query('INSERT INTO selected_pairs (student_id, student_name, student_email, guide_id, guide_name, guide_email, deadline) VALUES (?, ?, ?, ?, ?, ?, ?)', [studentId, student_name, student_email, guideId, guide_name, guide_email, deadline]);
     conn.release();
     return res.status(200).json({ message: 'Selected pair stored successfully' });
   } catch (error) {
@@ -620,6 +625,21 @@ app.post('/get_pair', async (req, res) => {
   }
 });
 
+
+
+// skndjabdjwabdbwa
+app.post('/getstudentdetails', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const [rows, fields] = await pool.execute(`SELECT * FROM students WHERE email = ? `, [email]);
+    const result = JSON.parse(JSON.stringify(rows));
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Error retrieving data from database');
+  }
+});
 app.listen(5000, () => {
     console.log(`Server started on port 5000`);
   });

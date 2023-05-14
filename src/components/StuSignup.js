@@ -10,13 +10,17 @@ function StuSignup(props) {
 
   const handleSubmit = async (e) => {
       const {name,email,PRN,PANEL,RollNo,cpassword,confirmPassword} = credentials;
+
+
+console.log(PRN,PANEL,RollNo);
+
       e.preventDefault();
       const response = await fetch("http://localhost:5000/studentpost", {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
           },
-          body: JSON.stringify({name,email,PRN,PANEL,RollNo, cpassword,confirmPassword})
+          body: JSON.stringify({name:name,email:email,PRN:PRN,PANEL:PANEL,RollNo:RollNo, cpassword:cpassword,confirmPassword:confirmPassword})
       });
       const json = await response.json()
       console.log(json);

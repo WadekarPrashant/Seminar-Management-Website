@@ -9,6 +9,7 @@ CREATE TABLE students (
 );
 select * from students;
 truncate table students;
+drop table students;
 
 CREATE TABLE coordinators (
   name VARCHAR(255) NOT NULL,
@@ -18,6 +19,7 @@ CREATE TABLE coordinators (
 );
 select * from coordinators;
 truncate table  coordinators;
+drop table coordinators;
 
 CREATE TABLE guides (
   name VARCHAR(255) NOT NULL,
@@ -27,6 +29,8 @@ CREATE TABLE guides (
 );
 select * from guides;
 truncate table guides;
+drop table guides;
+
 
 create table selected_pairs (student_id int,student_name VARCHAR(255) ,student_email VARCHAR(255), guide_id int,guide_name VARCHAR(255) ,guide_email VARCHAR(255));
 select * from selected_pairs;
@@ -44,7 +48,6 @@ CREATE TABLE review1 (
   FOREIGN KEY (studentEmail) REFERENCES students(email)
 );
 select * from review1s;
-
 drop table review1s;
 truncate table review1s;
 
@@ -55,6 +58,7 @@ CREATE TABLE review1_results (
 );
 select * from review1_results;
 truncate table review1_results;
+drop table review1_results;
 
 CREATE TABLE review2_results (
   email VARCHAR(255) NOT NULL,
@@ -70,6 +74,7 @@ CREATE TABLE review3_results (
 );
 select * from review3_results;
 truncate table review3_results;
+drop table review3_results;
 
 CREATE TABLE Ppt (
   guideEmail VARCHAR(255) NOT NULL,
@@ -112,7 +117,7 @@ BEGIN
 END$$
 DELIMITER ;
 -- Call the stored procedure to update a student's email address
-CALL update_student_email('ameya@gmail.com', 'ameyakhira@gmail.com');
+CALL update_student_email('old_email@gmail.com', 'new_email@gmail.com');
 
 -- Trigger
 DELIMITER $$
