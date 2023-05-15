@@ -103,7 +103,7 @@ function GuideSignup(props) {
       >
       <div className='container-fluid content-container'>
         <div className='form-container'>
-        <h1 style={{marginLeft: '5rem'}}>Guide Login</h1>
+        <h1 style={{marginLeft: '5rem'}}>Guide Signup</h1>
           <form onSubmit={handleSubmit}
             className='my-5'
             style={{
