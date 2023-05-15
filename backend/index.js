@@ -364,7 +364,7 @@ const fs = require('fs');
 const path = require('path');
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'P:\\Seminar\\seminar\\backend\\uploads');
+      cb(null, 'C:\\Users\\Dell\\OneDrive\\Desktop\\seminar\\backend\\uploads');
     },
     filename: (req, file, cb) => {
       const fileName = `${Date.now()}-${file.originalname}`;
